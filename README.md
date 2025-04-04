@@ -17,6 +17,6 @@ Make images into GrayScale
 
 Task Splitting:
 
-Script for Grayscale
+Script for Grayscale - Alex
 
-Python file with general idea of CNN
+Python file with general idea of CNN - Ben, Haadi
