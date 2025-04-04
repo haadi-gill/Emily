@@ -13,5 +13,7 @@ Labels image into a csv
 Make images into GrayScale
 
 Task Splitting:
+
 Script for Grayscale
+
 Python file with general idea of CNN
