@@ -9,7 +9,9 @@
 Data Splitting: Cross-fold stratification (especially with small amount of data)
 
 Preprocessing Ideas:
+
 Labels image into a csv
+
 Make images into GrayScale
 
 Task Splitting:
