@@ -20,3 +20,5 @@ Task Splitting:
 Script for Grayscale - Alex
 
 Python file with general idea of CNN - Ben, Haadi
+
+Add other code references
