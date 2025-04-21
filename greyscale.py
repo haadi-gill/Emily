@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 # Input and output directories
-input_root = 'pics'
+input_root = 'project_data'
 output_root = 'GSPics'
 
 # Create the output root if needed
@@ -39,6 +39,8 @@ for class_index, class_name in enumerate(class_names):
             img_np = np.asarray(img)
             data.append(img_np.reshape(-1))
             labels.append(class_index)  # Use the folder index as the label
+
+            print(input_file_path)
 
 # Convert lists to arrays
 data = np.array(data).astype(int)
