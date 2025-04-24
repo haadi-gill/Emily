@@ -1,0 +1,131 @@
+\documentclass[10pt]{article}
+
+\usepackage[left=0.8in,right=0.8in,top=0.15in,bottom=0.8in]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\urlstyle{rm}
+\usepackage{url}
+
+
+\title{CAI 4104: Machine Learning Engineering\\
+	\large Project Report:  {\textcolor{purple}{The Art of Transfer Learning}}} %% TODO: replace with the title of your project
+	
+	
+	
+%% TODO: your name and email go here (all members of the group)
+%% Comment out as needed and designate a point of contact
+%% Add / remove names as necessary
+\author{
+        Haadi Gill \\{\em (Point of Contact)} \\
+        email1@ufl.edu\\
+        \and
+        Benjamin Simonson \\
+        email2@ufl.edu\\
+        \and
+        Alexander Calvo \\
+        email3@ufl.edu\\
+        \and
+        Nathaniel Austin-Clarke \\
+        email4@ufl.edu\\
+        \and
+        Lysandra Belnavis-Walters \\
+        lbelnaviswalters@ufl.edu\\
+}
+
+
+% set the date to today
+\date{\today}
+
+
+\begin{document} % start document tag
+
+\maketitle
+
+
+
+%%% Remember: writing counts! (try to be clear and concise.)
+%%% Make sure to cite your sources and references (use refs.bib and \cite{} or \footnote{} for URLs).
+%%%
+
+
+
+%% TODO: write an introduction to make the report self-contained
+%% Must address:
+%% - What is the project about and what is notable about the approach and results?
+%%
+\section{Introduction}
+
+% TODO:
+In this project, we are tasked with creating a model, specifically a neural network, that can classify images into the following categories: backpack, book, calculator, chair, clock, desk, keychain, laptop, paper, pen, phone, and water bottle. By taking advantage of transfer learning and marginal fine-tuning, we were able to create a model with an accuracy above 90\%.
+Write here. You can cite scholarly work like this~\cite{murphy2022probabilistic}. You can also include URLs in a footnote like this.\footnote{UCI repository: \url{https://archive.ics.uci.edu/}.}
+
+
+
+
+%% TODO: write about your approach / ML pipeline
+%% Must contain:
+%% - How you are trying to solve this problem
+%% - How did you process the data?
+%% - What is the task and approach (ML techniques)?
+%%
+\section{Approach}
+
+% TODO:
+We attempt to solve this problem with a dense convolutional neural network (DenseNet). This network takes in "mini-batches of 3-channel RGB images of shape (3 x H x W)" \cite{https://pytorch.org/hub/pytorch_vision_densenet/} and is modified to output twelve logits wherein each logit represents the probability of an image being a certain class. In particular, we have added two layers to the trained DenseNet model: (1) a fully-connected layer with 128 units, ReLU activation, and  50\% dropout; and (2) a fully-connected output layer with 12 units. Only the layers that we have added are trained; the layers of the existing model are frozen. Furthermore, other than shuffling the images after initially loading it, we do not preprocess or augment the data. While these methods are often beneficial in helping the model converge or generalize, we did not see any added performance in the model.
+Cross-entropy loss and a learning rate of 0.001 (which is intelligently modified during training by the Adam optimizer) are also used in this model's architecture.
+To train the model, we use a batch size of 0 and 0 epochs. To prevent the model from overfitting, we also take advantage of early stopping.
+
+
+
+
+
+
+%% TODO: write about your evaluation methodology
+%% Must contain:
+%% - What are the metrics?
+%% - What are the baselines?
+%% - How did you split the data?
+%%
+\section{Evaluation Methodology}
+
+% TODO:
+To evaluate the model, we observed the loss and accuracy of each set (training, validation, test). These sets were split 60-20-20 in which 60\% of the data is reserved for training while the remaining 40\% is split across the validation and test sets. Per random guessing, the baseline accuracy is 8.33\%.
+
+
+
+
+%% TODO: write about your results/findings
+%% Must contain:
+%% - results comparing your approach to baseline according to metrics
+%%
+%% You can present this information in whatever way you want but consider tables and (or) figures.
+%%
+\section{Results}
+
+% TODO:
+Write here. 
+
+
+
+
+
+%% TODO: write about what you conclude. This is not meant to be a summary section but more of a takeaways/future work section.
+%% Must contain:
+%% - Any concrete takeaways or conclusions from your experiments/results/project
+%%
+%% You can also discuss limitations here if you want.
+%%
+\section{Conclusions}
+
+% TODO:
+Write here. 
+
+%%%%
+
+\bibliography{refs}
+\bibliographystyle{plain}
+
+
+\end{document} % end tag of the document
