@@ -130,4 +130,15 @@ train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size,
 
 PyTorch `DataLoader`s are used to efficiently handle batching, shuffling, and feeding data into the model during both training and validation phases.
 
-**🔹**
+**🔹 Batch Size**  
+For training, a batch size of 32 is used, which allows for efficient memory usage and faster convergence
+
+**🔹 Epochs**  
+The model is trained for 50 epochs
+
+```python
+# DataLoader for batching
+n_batch = 32  # Batch size for training
+train_loader = DataLoader(train_dataset, batch_size=n_batch, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=val_size, shuffle=False)
+```
