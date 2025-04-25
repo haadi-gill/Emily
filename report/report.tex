@@ -74,19 +74,21 @@
 % TODO:
 \indent In order to begin our project, the first step involves identifying the end goal and constructing what is not the most optimal solution to ever possibly exist, but a pathway of analysis and operations to lead to a level of reliability and accuracy that our team feels is acceptable. Since we are handling image data, the first thought was to use a convolution neural network (CNN) as they are much more adept at handling such a format of information. Then, the next step is to define the rest of the architecture and approach for processing the data. The main considerations overlapped with general machine learning complexities: make sure the model does well, but does not overfit. Our images needed to be learned, not memorized. 
 \newline
-\indent As this field is a collection of continuously growing and expanding ideas and applications, not all work needs to be orchestrated alone. Progress takes time, and there are tools to use to ease that process. We utilized an existing model, ResNet18 \cite{resnet}, to use as a basis for our own. After exploring different options \cite{ben}, we decided on a network that takes in "mini-batches of 3-channel RGB images of shape (3 x H x W)" \cite{densenet} and is modified to output twelve logits wherein each logit represents the probability of an image being a certain class. In particular, we have added two layers \cite{ridnik2023mldecoder} to the trained DenseNet model: 
+\indent As this field is a collection of continuously growing and expanding ideas and applications, not all work needs to be orchestrated alone. Progress takes time, and there are tools to use to ease that process. We planned to utilize an existing model, ResNet18 \cite{resnet}, to use as a basis for our own. After exploring and testing different options \cite{ben}, we decided on a network that takes in "mini-batches of 3-channel RGB images of shape (3 x H x W)" \cite{densenet} and is modified to output twelve logits wherein each logit represents the probability of an image being a certain class. In particular, we have added these layers \cite{ridnik2023mldecoder} to the trained DenseNet model: 
 \begin{enumerate}
-\item a fully-connected layer with 128 units, ReLU activation, and  50\% dropout
+\item a fully-connected layer with 256 units, ReLU activation, and a 50\% dropout rate
+\item a fully-connected layer with 64 units, ReLU activation, and a 50\% dropout rate
 \item a fully-connected output layer with 12 units
+\item max-pooling and flattening
 \end{enumerate}
-\indent Furthermore, other than shuffling the images after initially loading it, we do not preprocess or augment the data. While these methods are often beneficial in helping the model converge or generalize, we did not see any added performance in the model.
+\indent Furthermore, other than shuffling the images after initially loading it, we add some level of data augmentation through randomly flipping/rotating images, apply color jittering, and crop/resize images to help improve validation accuracy and overall model performance.
 \\
 \indent Now that our model had its architecture and the data had been prepared for training, the next step was to isolate individual training and validation data sets to analyze the neural network’s performance and further reduce overfitting. The validation and training datasets had 375 images reserved and the training dataset size included all the remaining image data. A random split created the two non-overlapping training and validation datasets. PyTorch DataLoaders funneled the data in batches into the model for training and validation. The model was then trained for 200 epochs.
 \begin{enumerate}
 \item Cross-entropy loss function
 \item Adam optimizer with a learning rate of 0.00001 and weight decay of 0.00001
 \end{enumerate}
-The weight decay adds a regularization to further reduce overfitting
+The weight decay adds a regularization to further reduce overfitting, a strategy implemented to combat poor pictures submitted with multiple possible and viable labels, in combination with the very small learning rate, to allow for more images to act as a united front for identifying expected object classification.
 
 
 
