@@ -3,14 +3,14 @@
 \usepackage[left=0.8in,right=0.8in,top=0.15in,bottom=0.8in]{geometry}
 \usepackage{xcolor}
 \usepackage{hyperref}
-
+\setlength\parindent{24pt}
 \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
 \urlstyle{rm}
 \usepackage{url}
 
 
 \title{CAI 4104: Machine Learning Engineering\\
-	\large Project Report:  {\textcolor{purple}{Title of the Project}}} %% TODO: replace with the title of your project
+	\large Project Report:  {\textcolor{purple}{The Art of Transfer Learning}}} %% TODO: replace with the title of your project
 	
 	
 	
@@ -18,20 +18,20 @@
 %% Comment out as needed and designate a point of contact
 %% Add / remove names as necessary
 \author{
-        Your Name \\{\em (Point of Contact)} \\
-        email1@ufl.edu\\
+        Benjamin Simonson \\{\em (Point of Contact)} \\
+        bsimonson@ufl.edu\\
         \and
-        Member 2's Name \\
-        email2@ufl.edu\\
+        Haadi Gill\\
+        h.gill@ufl.edu\\
         \and
-        Member 3's Name \\
-        email3@ufl.edu\\
+        Alexander Calvo \\
+        acalvo1@ufl.edu\\
         \and
-        Member 4's Name \\
-        email4@ufl.edu\\
+        Nathaniel Austin-Clarke \\
+        n.austinclarke@ufl.edu\\
         \and
-        Member 5's Name \\
-        email5@ufl.edu\\
+        Lysandra Belnavis-Walters \\
+        lbelnaviswalters@ufl.edu\\
 }
 
 
@@ -58,7 +58,7 @@
 \section{Introduction}
 
 % TODO:
-Write here. You can cite scholarly work like this~\cite{murphy2022probabilistic}. You can also include URLs in a footnote like this.\footnote{UCI repository: \url{https://archive.ics.uci.edu/}.}
+\indent Machine learning as a field continues to grow and expand every day, encompassing new breadths of applications and utilizations. As a result, the need to understand and implement models for individual scenarios has risen alongside it \cite{sarker2021}. In this project, we explore the construction, testing, evaluation, and adjustment of an image classification model to separate between 12 different categories of images: backpack, book, calculator, chair, clock, desk, keychain, laptop, paper, pen, phone, and water bottle. We accomplish this task using the TensorFlow \cite{tensorflow} and PyTorch \cite{pytorch} libraries available within the Python collection. All data has been amassed through a collection of user-driven images, resulting in the possibility and potential of outlier labels, complex or indistinguishable data, and other challenges. By taking advantage of transfer learning and marginal fine-tuning, we were able to create a model with an accuracy above 90\%.
 
 
 
@@ -72,7 +72,23 @@ Write here. You can cite scholarly work like this~\cite{murphy2022probabilistic}
 \section{Approach}
 
 % TODO:
-Write here. 
+\indent In order to begin our project, the first step involves identifying the end goal and constructing what is not the most optimal solution to ever possibly exist, but a pathway of analysis and operations to lead to a level of reliability and accuracy that our team feels is acceptable. Since we are handling image data, the first thought was to use a convolution neural network (CNN) as they are much more adept at handling such a format of information. Then, the next step is to define the rest of the architecture and approach for processing the data. The main considerations overlapped with general machine learning complexities: make sure the model does well, but does not overfit. Our images needed to be learned, not memorized. 
+\newline
+\indent As this field is a collection of continuously growing and expanding ideas and applications, not all work needs to be orchestrated alone. Progress takes time, and there are tools to use to ease that process. We utilized an existing model, ResNet18 \cite{resnet}, to use as a basis for our own. This network takes in "mini-batches of 3-channel RGB images of shape (3 x H x W)" \cite{densenet} and is modified to output twelve logits wherein each logit represents the probability of an image being a certain class. In particular, we have added two layers \cite{ridnik2023mldecoder} to the trained DenseNet model: 
+\begin{enumerate}
+\item a fully-connected layer with 128 units, ReLU activation, and  50\% dropout
+\item a fully-connected output layer with 12 units
+\end{enumerate}
+\indent Furthermore, other than shuffling the images after initially loading it, we do not preprocess or augment the data. While these methods are often beneficial in helping the model converge or generalize, we did not see any added performance in the model.
+\\
+\indent Now that our model had its architecture and the data had been prepared for training, the next step was to isolate individual training and validation data sets to analyze the neural network’s performance and further reduce overfitting. The validation and training datasets had 375 images reserved and the training dataset size included all the remaining image data. A random split created the two non-overlapping training and validation datasets. PyTorch DataLoaders funneled the data in batches into the model for training and validation. The model was then trained for 50 epochs.
+\begin{enumerate}
+\item Cross-entropy loss function
+\item Adam optimizer with a learning rate of 0.00001 and weight decay of 0.00001
+\end{enumerate}
+The weight decay adds a regularization to further reduce overfitting
+
+
 
 
 
@@ -87,7 +103,7 @@ Write here.
 \section{Evaluation Methodology}
 
 % TODO:
-Write here. 
+\indent To evaluate the model, we observed the loss and accuracy of each set (training, validation, test). These sets were split 60-20-20 in which 60\% of the data is reserved for training while the remaining 40\% is split across the validation and test sets. Since this is a classification task, the metric we are using to gauge performance is accuracy, linking the outputted labels to the expected test lables. Folowing this metric, per random guessing 1 class out of the 12, the baseline accuracy is 8.33\%.
 
 
 
@@ -101,7 +117,24 @@ Write here.
 \section{Results}
 
 % TODO:
-Write here. 
+\indent After 50 epochs with an 60-20-20 training, validation, testing dataset split:
+ 
+\begin{center}
+\begin{tabular}{|c c c c c|} 
+ \hline
+ Dataset & Loss & Accuracy (\%) & Precision (\%) & Recall (\%) \\ 
+ \hline
+ Training & 0.023 & 99.1 & 99.1 & 99.0 \\ 
+ \hline
+ Validation & 0.375 & 93.1 & 94.0 & 93.9 \\ 
+ \hline
+ Test & 0.524 & 92.3 & 92.6 & 92.6 \\ 
+\hline
+\end{tabular}
+\end{center}
+
+\indent There is a noticeable difference in the performance of the model with the training data (~99\%) and with the validation (~93\%) and test data (~92\%). This likely indicates that our model is slightly overfitting the training data. However, a roughly 92\% test accuracy indicates that the model generalizes well: reliably and correctly classifies unseen images to their correct labels. The similar precision and recall values within each dataset are somewhat expected as each class in the dataset has about the same number of examples. Additionally, this likely reinforces that the model is performing well. Generally, the model has a 92\% accuracy. The baseline accuracy is 8\% as the dataset is effectively balanced.
+
 
 
 
@@ -116,7 +149,8 @@ Write here.
 \section{Conclusions}
 
 % TODO:
-Write here. 
+\indent We developed a convolutional neural network capable of correctly identifying the object depicted in images. We used a pretrained ResNet18 model and modified the fully connected classifier head to better suit our problem. The model reached an accuracy of 92.3\% on the testing data set, alongside 92.6\% precision and recall. Equally high precision and recall indicate that the model neither frequently misidentifies classes nor fails to identify most instances of a given class—the model displays good predictive output and coverage. We observed model overfitting based on the difference between the training accuracy and validation and test accuracies; but data augmentation, dropout, and optimizer regularization did help to reduce it. Ultimately, the model performed well. But the image dataset is relatively small compared to the dataset ResNet18 was trained with, leading to at least some inevitable overfitting issues.
+
 
 %%%%
 
